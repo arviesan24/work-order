@@ -24,7 +24,8 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
+    path('accounts/',
+        include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('workers/',
         include(('workers.urls', 'workers'), namespace='workers')),
 
