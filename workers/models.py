@@ -1,3 +1,9 @@
 from django.db import models
 
-# Create your models here.
+
+class Worker(models.Model):
+    """Model for worker."""
+
+    name = models.CharField(max_length=150, blank=False)
+    company = models.CharField(max_length=250, blank=False)
+    email = models.EmailField(blank=False)
