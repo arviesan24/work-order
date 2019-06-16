@@ -1,3 +1,3 @@
-from django.shortcuts import render
+"""Views for workers app."""
 
-# Create your views here.
+from allauth.account.views import LoginView
