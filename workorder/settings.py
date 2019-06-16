@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     # projects apps
     'orders',
     'workers',
+
+    # 3rd party apps
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
