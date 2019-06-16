@@ -18,4 +18,7 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # rest framework URLs
+    path('api/', include('rest_framework.urls')),
 ]
