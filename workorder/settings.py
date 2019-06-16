@@ -46,6 +46,11 @@ INSTALLED_APPS = [
     'rest_framework',
 ]
 
+
+# Custom user model
+AUTH_USER_MODEL = 'workers.Worker'
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
