@@ -1,8 +1,7 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Worker(AbstractUser):
+class Worker(models.Model):
     """Model for worker."""
 
     name = models.CharField(max_length=150, blank=False)
