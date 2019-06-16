@@ -24,6 +24,8 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('workers/',
+        include(('workers.urls', 'workers'), namespace='workers')),
 
     # rest framework URLs
     path('api/', include(router.urls)),
