@@ -1,0 +1,18 @@
+{% extends 'accounts/form_base.html' %}
+
+
+{% block title %}Sign Out{% endblock title %}
+
+{% block card-title %}<h1>Sign Out</h1>{% endblock card-title %}
+
+{% block form %}
+<p>Are you sure you want to sign out?</p>
+<form id="logout-form" method="post">
+  {% csrf_token %}
+</form>
+{% endblock form %}
+
+{% block card-footer %}
+<input class="btn btn-primary btn-lg float-right mx-1" form="logout-form" type="submit" value="Sign Out" />
+<a href="{% url 'home' %}" class="btn btn-outline-primary btn-lg float-right mx-1">Go Back</a>
+{% endblock card-footer %}

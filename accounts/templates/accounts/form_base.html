@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block css %}
+<style>
+input[type=text], input[type=email], input[type=password] {
+  width: 100%;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+</style>
+{% endblock css %}
+
+{% block content %}
+  <div class="card col-md-4 offset-md-4 mt-3 p-0">
+    <div class="card-title text-center p-2">
+      {% block card-title %}{% endblock card-title %}
+    </div>
+    <div class="card-body">
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <small my-0>{{ form.non_field_errors }}</small>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endif %}
+      {% block form %}
+      {% endblock form %}
+    </div>
+    <div class="card-footer">
+      {% block card-footer %}{% endblock card-footer %}
+    </div>
+  <div>
+{% endblock content %}
+
+{% block js %}
+<script>
+  $('.alert').alert();
+</script>
+{% endblock js %}
