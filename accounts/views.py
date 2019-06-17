@@ -37,6 +37,13 @@ class CustomUserSignupView(SignupView):
         return frm
 
 
+class CustomUserLogoutView(LogoutView):
+    """Custom View for user logout."""
+
+    template_name = 'accounts/logout.html'
+    success_url = reverse_lazy('accounts:user-login')
+
+
 class HomeTemplateView(LoginRequiredMixin, TemplateView):
     """TemplateView for home page."""
 
