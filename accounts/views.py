@@ -8,7 +8,7 @@ from allauth.account.views import LoginView
 from allauth.account.views import SignupView
 
 
-class CustomUserLogin(LoginView):
+class CustomUserLoginView(LoginView):
     """Custom View for user login."""
 
     template_name = 'accounts/login.html'
