@@ -16,6 +16,23 @@ class CustomUserLoginView(LoginView):
     success_url = reverse_lazy('home')
 
 
+class CustomUserSignupView(SignupView):
+    """Custom View for user signup."""
+
+    template_name = 'accounts/signup.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        """Login user after successful registration."""
+        frm = super().form_valid(form)
+        user = authenticate(
+            username=form.cleaned_data['username'],
+            password=form.cleaned_data['password1'])
+        login(self.request, user)
+
+        return frm
+
+
 class HomeTemplateView(LoginRequiredMixin, TemplateView):
     """TemplateView for home page."""
 
