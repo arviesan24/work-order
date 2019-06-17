@@ -6,7 +6,7 @@
 {% block card-title %}<h1>Sign In</h1>{% endblock card-title %}
 
 {% block form %}
-<p>If you have not created an account yet, then please <a href="{% url 'account_signup' %}">sign up</a> first.</p>
+<p>If you have not created an account yet, then please <a href="{% url 'accounts:user-signup' %}">sign up</a> first.</p>
 <form id="login-form" method="post">
   {% csrf_token %}
   <div class="form-group">
