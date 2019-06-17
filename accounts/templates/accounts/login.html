@@ -1,18 +1,29 @@
-{% extend 'accounts/form_base.html' %}
+{% extends 'accounts/form_base.html' %}
 
 
 {% block title %}Sign In{% endblock title %}
 
+{% block card-title %}<h1>Sign In</h1>{% endblock card-title %}
+
 {% block form %}
 <p>If you have not created an account yet, then please <a href="{% url 'account_signup' %}">sign up</a> first.</p>
-<form method="post">
+<form id="login-form" method="post">
   {% csrf_token %}
-  <label for="id_login">Username:</label>
-  {{ form.login }}
-  <label for="id_password">Password:</label>
-  {{ form.password }}
-  <label for="id_remember">Remember Me:</label>
-  {{ form.remember }}
-  <button class="btn btn-primary" type="submit">Sign In</button>
+  <div class="form-group">
+    <label for="id_login">Username:</label>
+    {{ form.login }}
+  </div>
+  <div class="form-group">
+    <label for="id_password">Password:</label>
+    {{ form.password }}
+  </div>
+  <div class="form-group">
+    <label for="id_remember">Remember Me:</label>
+    {{ form.remember }}
+  </div>
 </form>
 {% endblock form %}
+
+{% block card-footer %}
+<input class="btn btn-primary btn-lg float-right" form="login-form" type="submit" value="Sign In" />
+{% endblock card-footer %}
