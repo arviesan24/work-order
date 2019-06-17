@@ -1,0 +1,18 @@
+{% extend 'accounts/form_base.html' %}
+
+
+{% block title %}Sign In{% endblock title %}
+
+{% block form %}
+<p>If you have not created an account yet, then please <a href="{% url 'account_signup' %}">sign up</a> first.</p>
+<form method="post">
+  {% csrf_token %}
+  <label for="id_login">Username:</label>
+  {{ form.login }}
+  <label for="id_password">Password:</label>
+  {{ form.password }}
+  <label for="id_remember">Remember Me:</label>
+  {{ form.remember }}
+  <button class="btn btn-primary" type="submit">Sign In</button>
+</form>
+{% endblock form %}
