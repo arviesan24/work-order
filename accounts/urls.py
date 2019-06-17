@@ -8,4 +8,5 @@ from . import views
 
 urlpatterns = [
     path('login/', views.CustomUserLoginView.as_view(), name='user-login'),
+    path('signup/', views.CustomUserSignupView.as_view(), name='user-signup'),
 ]
