@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 
 from allauth.account.views import LoginView
+from allauth.account.views import LogoutView
 from allauth.account.views import SignupView
 
 
