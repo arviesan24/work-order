@@ -24,11 +24,13 @@ class CustomUserSignupView(SignupView):
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        """Login user after successful registration."""
+        """Returns actions after validating form."""
         frm = super().form_valid(form)
+        # authenticate the newly created user
         user = authenticate(
             username=form.cleaned_data['username'],
             password=form.cleaned_data['password1'])
+        # login user after authentication
         login(self.request, user)
 
         return frm
