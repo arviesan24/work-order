@@ -16,3 +16,23 @@ class WorkOrder(models.Model):
     title = models.CharField(max_length=250, blank=False)
     description = models.TextField(blank=False)
     deadline = models.DateField(blank=False)
+
+
+@receiver(m2m_changed, sender=WorkOrder.workers.through)
+def prevent_more_than_five_workers(
+        action, instance, reverse, pk_set, **kwargs):
+    """Signal preventing excessive workers."""
+    if action != 'pre_add':
+        return
+
+    if not reverse:
+        # updating worker to WorkOrder
+        workers_count = Worker.objects.filter(
+            workorder__id=instance.id).count()
+        # add existing workers and user entered workers
+        total_workers = workers_count + len(pk_set)
+
+        # raise validation error if total_workers exceeded 5
+        if total_workers > 5:
+            raise ValidationError(
+                _('Only 5 workers are allowed per WorkOrder.'))
