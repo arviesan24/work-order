@@ -12,9 +12,7 @@ from workers.models import Worker
 class WorkOrder(models.Model):
     """Model for WorkOrder."""
 
-    workers = models.ForeignKey(
-        'workers.Worker', on_delete=models.SET_NULL, null=True,
-        related_name='workorders', related_query_name='workorder')
+    workers = models.ManyToManyField('workers.Worker')
     title = models.CharField(max_length=250, blank=False)
     description = models.TextField(blank=False)
     deadline = models.DateField(blank=False)
