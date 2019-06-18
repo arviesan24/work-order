@@ -6,6 +6,8 @@ from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
+from workers.models import Worker
+
 
 class WorkOrder(models.Model):
     """Model for WorkOrder."""
