@@ -5,7 +5,7 @@ from rest_framework import serializers
 from . import models
 
 
-class OrderSerializer(serializers.HyperlinkedModelSerializer):
+class WorkOrderSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for Order model."""
 
     class Meta:
