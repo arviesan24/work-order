@@ -16,5 +16,5 @@ class WorkOrderForm(forms.ModelForm):
 
         # Raise error if user enters more than 5 workers.
         if len(workers) > 5:
-            raise ValidationError(
+            raise forms.ValidationError(
                 _('Only 5 workers are allowed per WorkOrder.'))
