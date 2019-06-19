@@ -6,7 +6,7 @@ from . import models
 from . import serializers
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class WorkOrderViewSet(viewsets.ModelViewSet):
     """Viewset for OrderSerializer."""
 
     queryset = models.Order.objects.all()
