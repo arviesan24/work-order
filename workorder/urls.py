@@ -34,6 +34,7 @@ urlpatterns = [
         include(('workers.urls', 'workers'), namespace='workers')),
 
     # rest framework URLs
+    path('', include('orders.urls_api')),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
 ]
