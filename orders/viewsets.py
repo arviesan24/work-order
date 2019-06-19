@@ -9,5 +9,5 @@ from . import serializers
 class WorkOrderViewSet(viewsets.ModelViewSet):
     """Viewset for OrderSerializer."""
 
-    queryset = models.Order.objects.all()
+    queryset = models.WorkOrder.objects.all()
     serializer_class = serializers.OrderSerializer
