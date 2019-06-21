@@ -21,3 +21,4 @@ class WorkerViewSet(viewsets.ModelViewSet):
     queryset = models.Worker.objects.all()
     serializer_class = serializers.WorkerSerializer
     filter_backends = (django_filters.DjangoFilterBackend,)
+    filterset_class = WorkerFilterSet
