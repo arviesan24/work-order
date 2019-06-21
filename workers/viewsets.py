@@ -8,6 +8,14 @@ from . import models
 from . import serializers
 
 
+class WorkerFilter(django_filters.FilterSet):
+    """Filterset for WorkerViewSet."""
+
+    class Meta:
+        model = models.Worker
+        fields = ['name', 'company', 'email']
+
+
 class WorkerViewSet(viewsets.ModelViewSet):
     """Viewset for WorkerSerializer."""
 
