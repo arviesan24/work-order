@@ -20,3 +20,4 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
 
     queryset = models.WorkOrder.objects.all()
     serializer_class = serializers.WorkOrderSerializer
+    filter_backends = (django_filters.DjangoFilterBackend,)
