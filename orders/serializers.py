@@ -13,3 +13,13 @@ class WorkOrderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.WorkOrder
         fields = ['url', 'id', 'workers', 'title', 'description', 'deadline']
+
+    def validate_workers(self, value):
+        """Return validated `workers` value."""
+        workers = value
+        # raise validation error if workers are more than 5
+        if len(workers) > 5:
+            raise serializers.ValidationError(
+                _('Only 5 workers are allowed per WorkOrder.'))
+
+        return value
