@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'workers',
 
     # 3rd party apps
+    'django_filters',
     'rest_framework',
     'allauth',
     'allauth.account',
