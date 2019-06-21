@@ -7,6 +7,14 @@ from . import models
 from . import serializers
 
 
+class WorkOrderFilterSet(django_filters.FilterSet):
+    """Filterset for WorkOrderViewSet."""
+
+    class Meta:
+        model = models.WorkOrder
+        fields = ['workers', 'title', 'description', 'deadline']
+
+
 class WorkOrderViewSet(viewsets.ModelViewSet):
     """Viewset for OrderSerializer."""
 
