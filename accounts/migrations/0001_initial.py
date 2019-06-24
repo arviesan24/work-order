@@ -12,3 +12,16 @@ def populate_token(apps, schema_editor):
     for user in User.objects.all():
         token = Token.objects.create(user=user)
         print(token.key)
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+    ]
+
+    operations = [
+        migrations.RunPython(
+            populate_token, reverse_code=migrations.RunPython.noop),
+    ]
