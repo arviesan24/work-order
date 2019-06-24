@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+{% endblock content %}
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+{% block js %}
+{% if DEBUG %}
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+{% else %}
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+{% endif %}
+{% endblock js %}
