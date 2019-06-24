@@ -10,9 +10,16 @@ from . import serializers
 class WorkOrderFilterSet(django_filters.FilterSet):
     """Filterset for WorkOrderViewSet."""
 
+    def get_workers_name(self, queryset, name, value):
+        """Custom filter for `workers_name`"""
+        return queryset.filter(workers__name__contains=value)
+
+    workers_name = django_filters.CharFilter(method='get_workers_name')
+
     class Meta:
         model = models.WorkOrder
-        fields = ['workers', 'title', 'description', 'deadline']
+        fields = [
+            'workers', 'workers_name', 'title', 'description', 'deadline']
 
 
 class WorkOrderViewSet(viewsets.ModelViewSet):
