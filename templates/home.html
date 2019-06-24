@@ -3,7 +3,8 @@
 {% block title %}Home{% endblock title %}
 
 {% block content %}
-<div id="app">
+<div id="app" class="card mt-3 mx-5">
+  <div class="card-header text-center"><h1>Work Orders</h1></div>
   <work-orders v-bind:work-orders="workOrders"></work-orders>
 </div>
 {% endblock content %}
@@ -18,7 +19,7 @@ Vue.component('work-orders', {
     workOrders: Array,
   },
   template: `
-  <div class="table-responsive-sm">
+  <div class="table-responsive">
     <table class="table table-hover">
       <thead>
         <tr>
@@ -30,10 +31,16 @@ Vue.component('work-orders', {
       </thead>
       <tbody>
         <tr v-for="workOrder in workOrders">
-          <th scope="row">[[ workOrder ]]</th>
-          <td></td>
-          <td></td>
-          <td></td>
+          <th scope="row">[[ workOrder.title ]]</th>
+          <td>[[ workOrder.description ]]</td>
+          <td>[[ workOrder.deadline ]]</td>
+          <td>
+            <span v-for="worker in workOrder.workers">
+              <button class="btn btn-outline-primary btn-sm mx-1">
+                [[ worker.name ]]
+              </button>
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -43,9 +50,31 @@ Vue.component('work-orders', {
 
 var vm = new Vue({
   el: '#app',
-  delimiters: ['[[', ']]'],
-  data: {
-    workOrders: [],
+  data() {
+    return {
+      workOrders: [],
+    }
+  },
+  mounted() {
+    this.loadWorkers();
+    this.loadWorkOrders();
+  },
+  methods: {
+    loadWorkers() {
+
+    },
+    loadWorkOrders() {
+      axios({
+      method: 'get',
+      url: `${apiRootUrl}work-orders/`,
+      header: {
+        'Authorization': UserToken
+        }
+      })
+      .then(response => {
+        this.workOrders = response.data;
+      });
+    },
   }
 })
 </script>
