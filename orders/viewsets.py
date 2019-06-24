@@ -12,7 +12,7 @@ class WorkOrderFilterSet(django_filters.FilterSet):
 
     def get_workers_name(self, queryset, name, value):
         """Custom filter for `workers_name`."""
-        return queryset.filter(workers__name__contains=value)
+        return queryset.filter(workers__name__icontains=value)
 
     workers_name = django_filters.CharFilter(method='get_workers_name')
 
