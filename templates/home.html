@@ -3,15 +3,46 @@
 {% block title %}Home{% endblock title %}
 
 {% block content %}
-<div id="app" class="card mt-3 mx-5">
+<div id="app" class="card col-md-8 offset-md-2 mt-4 px-0">
   <div class="card-header text-center"><h1>Work Orders</h1></div>
-  <workorder-list v-bind:work-orders="workOrders"></workorder-list>
+  <div class="card-body">
+    <search-bar v-on:emitted-search-text="getSearchText($event)"></search-bar>
+    <workorder-list v-bind:work-orders="workOrders"></workorder-list>
+  </div>
 </div>
 {% endblock content %}
 
 {% block js %}
 {{ block.super }}
 <script>
+Vue.component('search-bar', {
+  props: {
+
+  },
+  data() {
+    return {
+      searchText: ''
+    }
+  },
+  mounted() {
+    this.search = this.searchText;
+  },
+  methods: {
+    emitSearchValue(searchText) {
+      this.$emit('emitted-search-text',  searchText);
+    }
+  },
+  template: `
+    <div class="row">
+      <div class="input-group col-sm-6 mb-3">
+        <input type="text" v-model:value="searchText" class="form-control" placeholder="Search Worker" aria-label="Search Worker">
+        <div class="input-group-append">
+          <button class="btn btn-outline-danger" v-on:click="emitSearchValue(searchText)">Search</button>
+        </div>
+      </div>
+    </div>
+  `
+})
 
 Vue.component('workorder-list', {
   delimiters: ['[[', ']]'],
@@ -50,18 +81,16 @@ Vue.component('workorder-list', {
 
 var vm = new Vue({
   el: '#app',
-  data() {
-    return {
-      workOrders: [],
-    }
+  data:{
+    workOrders: [],
+    searchText: '',
   },
   mounted() {
-    this.loadWorkers();
     this.loadWorkOrders();
   },
   methods: {
-    loadWorkers() {
-
+    getSearchText(searchText) {
+      this.searchText = searchText;
     },
     loadWorkOrders() {
       axios({
