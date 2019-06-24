@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     'django_filters',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
