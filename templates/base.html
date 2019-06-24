@@ -9,6 +9,35 @@
   {% endblock css %}
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+  <a class="navbar-brand" href="{% url 'home' %}">WorkOrder</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      {% if user.is_authenticated %}
+        {% url 'home' as home %}
+        <li class="nav-item{% if request.path == home %} active{% endif %}">
+          <a class="nav-link" href="{{ home }}">Home {% if request.path == home %}<span class="sr-only">(current)</span>{% endif %}</a>
+        </li>
+        {% url 'accounts:user-logout' as account_logout %}
+        <li class="nav-item{% if request.path == account_logout %} active{% endif %}">
+          <a class="nav-link" href="{{ account_logout }}">Sign-out {% if request.path == account_logout %}<span class="sr-only">(current)</span>{% endif %}</a>
+        </li>
+      {% else %}
+        {% url 'accounts:user-login' as account_login %}
+        <li class="nav-item{% if request.path == account_login %} active{% endif %}">
+          <a class="nav-link" href="{{ account_login }}">Login {% if request.path == account_login %}<span class="sr-only">(current)</span>{% endif %}</a>
+        </li>
+        {% url 'accounts:user-signup' as account_signup %}
+        <li class="nav-item{% if request.path == account_signup %} active{% endif %}">
+          <a class="nav-link" href="{{ account_signup }}">Signup {% if request.path == account_signup %}<span class="sr-only">(current)</span>{% endif %}</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
 <div class="container-fluid">
   {% block content %}{% endblock content %}
 </div>
