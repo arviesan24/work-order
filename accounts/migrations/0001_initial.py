@@ -2,3 +2,5 @@
 
 from django.contrib.auth import get_user_model
 from django.db import migrations, models
+
+from rest_framework.authtoken.models import Token
