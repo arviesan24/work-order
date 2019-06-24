@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'workers',
 
     # 3rd party apps
+    'django_filters',
     'rest_framework',
+    'rest_framework.authtoken',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -66,6 +68,23 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1
+
+
+#
+# REST FRAMEWORK settings
+#
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 
 MIDDLEWARE = [
