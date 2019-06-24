@@ -5,7 +5,7 @@
 {% block content %}
 <div id="app" class="card mt-3 mx-5">
   <div class="card-header text-center"><h1>Work Orders</h1></div>
-  <work-orders v-bind:work-orders="workOrders"></work-orders>
+  <workorder-list v-bind:work-orders="workOrders"></workorder-list>
 </div>
 {% endblock content %}
 
@@ -13,7 +13,7 @@
 {{ block.super }}
 <script>
 
-Vue.component('work-orders', {
+Vue.component('workorder-list', {
   delimiters: ['[[', ']]'],
   props: {
     workOrders: Array,
