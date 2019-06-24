@@ -1,7 +1,52 @@
-{% extends 'base.html' %}
+{% extends 'vue_base.html' %}
 
 {% block title %}Home{% endblock title %}
 
 {% block content %}
-
+<div id="app">
+  <work-orders v-bind:work-orders="workOrders"></work-orders>
+</div>
 {% endblock content %}
+
+{% block js %}
+{{ block.super }}
+<script>
+
+Vue.component('work-orders', {
+  delimiters: ['[[', ']]'],
+  props: {
+    workOrders: Array,
+  },
+  template: `
+  <div class="table-responsive-sm">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Deadline</th>
+          <th scope="col">Workers</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="workOrder in workOrders">
+          <th scope="row">[[ workOrder ]]</th>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  `
+})
+
+var vm = new Vue({
+  el: '#app',
+  delimiters: ['[[', ']]'],
+  data: {
+    workOrders: [],
+  }
+})
+</script>
+{% endblock js %}
