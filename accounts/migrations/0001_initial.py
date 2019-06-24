@@ -4,3 +4,11 @@ from django.contrib.auth import get_user_model
 from django.db import migrations, models
 
 from rest_framework.authtoken.models import Token
+
+
+def populate_token(apps, schema_editor):
+
+    User = get_user_model()
+    for user in User.objects.all():
+        token = Token.objects.create(user=user)
+        print(token.key)
