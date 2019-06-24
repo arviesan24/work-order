@@ -13,6 +13,7 @@ class WorkOrderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.WorkOrder
         fields = ['url', 'id', 'workers', 'title', 'description', 'deadline']
+        depth = 1
 
     def validate_workers(self, value):
         """Return validated `workers` value."""
