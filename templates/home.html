@@ -104,13 +104,37 @@ Vue.component('add-workorder-modal', {
       inputDeadline: null,
       titleError: '',
       descriptionError: '',
-      deadline: '',
+      deadlineError: '',
+      submitDisabled: true,
     }
   },
   methods: {
     saveWorkOrder() {
 
-    }
+    },
+    inputValidation() {
+      let dateToday = new Date().toLocaleDateString();
+      if (this.inputTitle==='' || 
+          this.inputDescription==='' ||
+          !Date.parse(this.inputDeadline) ||
+          Date.parse(this.inputDeadline) < Date.parse(dateToday)) {
+            this.submitDisabled = true;
+      } else {
+        this.submitDisabled = false;
+      }
+    },
+  },
+  watch: {
+    inputTitle() {
+      this.titleError = (this.inputTitle==='') ? 'Title is required.' : '';
+    },
+    inputDescription() {
+      this.descriptionError = (this.inputDescription==='') ? 'Description is required.' : '';
+    },
+    inputDeadline() {
+      let dateToday = new Date().toLocaleDateString();
+      this.deadlineError = (!Date.parse(this.inputDeadline) || Date.parse(this.inputDeadline) < Date.parse(dateToday)) ? "Deadline can't be empty or in the past." : '';
+    },
   },
   template: `
   <transition name="modal">
@@ -129,15 +153,15 @@ Vue.component('add-workorder-modal', {
               <form>
                 <div class="form-group">
                   <label for="inputTitle">Title:</label>
-                  <input v-model="inputTitle" type="text" class="form-control" id="inputTitle" placeholder="Enter Title">
+                  <input v-model="inputTitle" v-on:input="inputValidation()" type="text" class="form-control" id="inputTitle" placeholder="Enter Title">
                 </div>
                 <div class="form-group">
                   <label for="inputDescription">Description:</label>
-                  <textarea v-model="inputDescription" class="form-control" id="inputDescription" rows="3"></textarea>
+                  <textarea v-model="inputDescription" v-on:input="inputValidation()" class="form-control" id="inputDescription" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                   <label for="inputDeadline">Deadline:</label>
-                  <input v-model="inputDeadline" type="date" class="form-control" id="inputDeadline">
+                  <input v-model="inputDeadline" v-on:input="inputValidation()" type="date" class="form-control" id="inputDeadline">
                 </div>
               </form>
             </slot>
@@ -148,7 +172,7 @@ Vue.component('add-workorder-modal', {
               <button class="btn btn-outline-danger mx-2" @click="$emit('close')">
                 Cancel
               </button>
-              <button class="btn btn-danger ml-2" @click="saveWorkOrder(); $emit('close')">
+              <button class="btn btn-danger ml-2" v-bind:disabled="submitDisabled" @click="saveWorkOrder(); $emit('close')">
                 Save
               </button>
             </slot>
