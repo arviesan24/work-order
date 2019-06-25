@@ -23,19 +23,23 @@
 }
 
 .modal-container {
-  width: 300px;
+  width: 500px;
   margin: 0px auto;
-  padding: 20px 30px;
+  padding: 0px 0px;
   background-color: #fff;
-  border-radius: 2px;
+  border-radius: 5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 
+.modal-header {
+  background-color: #DC3545;
+}
+
 .modal-header h3 {
   margin-top: 0;
-  color: #42b983;
+  color: #fff;
 }
 
 .modal-body {
@@ -101,7 +105,7 @@ Vue.component('add-workorder-modal', {
 
           <div class="modal-header">
             <slot name="header">
-              default header
+              <h3>New Work Order</h3>
             </slot>
           </div>
 
