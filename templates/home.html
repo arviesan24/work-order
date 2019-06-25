@@ -110,7 +110,25 @@ Vue.component('add-workorder-modal', {
   },
   methods: {
     saveWorkOrder() {
-
+      axios.defaults.xsrfCookieName = 'csrftoken';
+      axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+      axios({
+        method: 'post',
+        url: `${apiRootUrl}work-orders/`,
+        header: {
+        'Authorization': UserToken,
+        },
+        data: {
+          title: this.inputTitle,
+          description: this.inputDescription,
+          deadline: this.inputDeadline
+        }
+      }).then(() => {
+        // reload workOrder list
+        this.$parent.loadWorkOrders();
+      }).catch((error) => {
+        console.log(error);
+      });
     },
     inputValidation() {
       let dateToday = new Date().toLocaleDateString();
