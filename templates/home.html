@@ -88,7 +88,7 @@
         <add-workorder-modal v-if="showWorkOrderModal" v-on:close="showWorkOrderModal=false"></add-workorder-modal>
       </div>
     </div>
-    <workorder-list v-on:worker="" v-bind:work-orders="workOrders"></workorder-list>
+    <workorder-list v-on:selected-workorder="setSelectedWorkOrder($event)" v-bind:work-orders="workOrders"></workorder-list>
   </div>
 </div>
 {% endblock content %}
@@ -239,6 +239,11 @@ Vue.component('workorder-list', {
       showWorkerModal: false,
     }
   },
+  methods: {
+    emitWorkOrder(val) {
+      this.$emit('selected-workorder', val)
+    }
+  },
   template: `
   <div class="table-responsive">
     <table class="table table-hover">
@@ -261,7 +266,7 @@ Vue.component('workorder-list', {
                 [[ worker.name ]]
               </button>
             </span>
-            <button @click="showWorkerModal=true;" tooltip.hover title="Add Workers" class="btn btn-outline-success btn-sm mx-1">
+            <button @click="showWorkerModal=true; emitWorkOrder(workOrder);" tooltip.hover title="Add Workers" class="btn btn-outline-success btn-sm mx-1">
               +
             </button>
           </td>
@@ -276,7 +281,6 @@ Vue.component('workorder-list', {
 Vue.component('worker-modal', {
   delimiters: ['[[', ']]'],
   props: {
-    worker: Object,
   },
   template: `
   <transition name="modal">
@@ -292,6 +296,7 @@ Vue.component('worker-modal', {
 
           <div class="modal-body">
             <slot name="body">
+              
             </slot>
           </div>
 
@@ -316,6 +321,7 @@ var vm = new Vue({
     workOrders: [],
     searchText: '',
     showWorkOrderModal: false,
+    selectedWorkOrder: {},
   },
   mounted() {
     this.loadWorkOrders();
@@ -340,6 +346,9 @@ var vm = new Vue({
         this.workOrders = response.data;
       });
     },
+    setSelectedWorkOrder(val) {
+      this.selectedWorkOrder = val;
+    }
   }
 })
 </script>
