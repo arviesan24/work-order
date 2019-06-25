@@ -25,7 +25,7 @@ class WorkOrderFilterSet(django_filters.FilterSet):
 class WorkOrderViewSet(viewsets.ModelViewSet):
     """Viewset for OrderSerializer."""
 
-    queryset = models.WorkOrder.objects.all().order_by('-deadline')
+    queryset = models.WorkOrder.objects.all().order_by('deadline')
     serializer_class = serializers.WorkOrderSerializer
     filter_backends = (django_filters.DjangoFilterBackend,)
     filterset_class = WorkOrderFilterSet
