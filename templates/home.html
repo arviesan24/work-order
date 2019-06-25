@@ -91,11 +91,15 @@ var vm = new Vue({
   methods: {
     getSearchText(searchText) {
       this.searchText = searchText;
+      this.loadWorkOrders(this.searchText);
     },
-    loadWorkOrders() {
+    loadWorkOrders(searchParam) {
       axios({
       method: 'get',
       url: `${apiRootUrl}work-orders/`,
+      params: {
+        workers_name: searchParam
+      },
       header: {
         'Authorization': UserToken
         }
