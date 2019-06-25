@@ -84,8 +84,8 @@
         <search-bar v-on:emitted-search-text="getSearchText($event)"></search-bar>
       </div>
       <div class="col-sm-6 mb-3">
-        <button v-on:click="showModal=true" class="btn btn-outline-danger float-right">Add Work Order</button>
-        <add-workorder-modal v-if="showModal" v-on:close="showModal=false"></add-workorder-modal>
+        <button v-on:click="showWorkOrderModal=true" class="btn btn-outline-danger float-right">Add Work Order</button>
+        <add-workorder-modal v-if="showWorkOrderModal" v-on:close="showWorkOrderModal=false"></add-workorder-modal>
       </div>
     </div>
     <workorder-list v-bind:work-orders="workOrders"></workorder-list>
@@ -272,7 +272,7 @@ var vm = new Vue({
   data:{
     workOrders: [],
     searchText: '',
-    showModal: false,
+    showWorkOrderModal: false,
   },
   mounted() {
     this.loadWorkOrders();
