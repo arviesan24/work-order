@@ -97,6 +97,18 @@
 {{ block.super }}
 <script>
 Vue.component('add-workorder-modal', {
+  data() {
+    return {
+      inputTitle: '',
+      inputDescription: '',
+      inputDeadline: null
+    }
+  },
+  methods: {
+    saveWorkOrder() {
+
+    }
+  },
   template: `
   <transition name="modal">
     <div class="modal-mask">
@@ -111,15 +123,30 @@ Vue.component('add-workorder-modal', {
 
           <div class="modal-body">
             <slot name="body">
-              default body
+              <form>
+                <div class="form-group">
+                  <label for="inputTitle">Title:</label>
+                  <input v-model="inputTitle" type="text" class="form-control" id="inputTitle" placeholder="Enter Title">
+                </div>
+                <div class="form-group">
+                  <label for="inputDescription">Description:</label>
+                  <textarea v-model="inputDescription" class="form-control" id="inputDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="inputDeadline">Deadline:</label>
+                  <input v-model="inputDeadline" type="date" class="form-control" id="inputDeadline">
+                </div>
+              </form>
             </slot>
           </div>
 
           <div class="modal-footer">
             <slot name="footer">
-              default footer
-              <button class="modal-default-button" @click="$emit('close')">
-                OK
+              <button class="btn btn-outline-danger mx-2" @click="$emit('close')">
+                Cancel
+              </button>
+              <button class="btn btn-danger ml-2" @click="saveWorkOrder(); $emit('close')">
+                Save
               </button>
             </slot>
           </div>
