@@ -296,6 +296,9 @@ Vue.component('worker-modal', {
       ]
     }
   },
+  mounted() {
+    this.value = this.selectedWorkOrder.workers;
+  },
   template: `
   <transition name="modal">
     <div class="modal-mask">
