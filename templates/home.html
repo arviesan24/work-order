@@ -353,6 +353,24 @@ var vm = new Vue({
       this.searchText = searchText;
       this.loadWorkOrders(this.searchText);
     },
+    workOrdersFetchWorkers(workOrdersRes, workersRes) {
+      workOrdersRes.forEach(workOrder => {
+        let newWorkers = [];
+        // map changes to each worker of WorkOrder
+        if (workOrder.workers.length > 0) {
+          workOrder.workers.map(worker => {
+            // fetch new worker value from all workers
+            workersRes.forEach(w => {
+              if (worker===w['url']) {
+                newWorkers.push(w);
+              }
+            });
+          });
+        }
+        workOrder.workers = newWorkers;
+      });
+      return workOrdersRes;
+    },
     loadWorkOrders(searchParam) {
       axios({
         method: 'get',
