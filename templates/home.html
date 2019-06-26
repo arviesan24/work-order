@@ -286,18 +286,20 @@ Vue.component('worker-modal', {
   data() {
     return {
       value: [],
-      options: [
-        { name: 'Vue.js', language: 'JavaScript' },
-        { name: 'Adonis', language: 'JavaScript' },
-        { name: 'Rails', language: 'Ruby' },
-        { name: 'Sinatra', language: 'Ruby' },
-        { name: 'Laravel', language: 'PHP' },
-        { name: 'Phoenix', language: 'Elixir' }
-      ]
+      options: []
     }
   },
   mounted() {
     this.value = this.selectedWorkOrder.workers;
+    options = axios({
+      method: 'get',
+      url: `${apiRootUrl}workers/`,
+      header: {
+        'Authorization': UserToken
+      }
+    }).then(res => {
+      this.options = res.data;
+    });
   },
   template: `
   <transition name="modal">
