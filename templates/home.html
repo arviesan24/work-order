@@ -172,6 +172,7 @@ Vue.component('add-workorder-modal', {
                 <div class="form-group">
                   <label for="inputTitle">Title:</label>
                   <input v-model="inputTitle" v-on:input="inputValidation()" type="text" class="form-control" id="inputTitle" placeholder="Enter Title">
+                  <small class="text-danger">[[titleError]]</small>
                 </div>
                 <div class="form-group">
                   <label for="inputDescription">Description:</label>
