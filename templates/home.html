@@ -321,6 +321,27 @@ Vue.component('worker-modal', {
       this.options = res.data;
     });
   },
+  methods: {
+    saveWorkers() {
+      axios.defaults.xsrfCookieName = 'csrftoken';
+      axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+      axios({
+        method: 'patch',
+        url: this.selectedWorkOrder.url,
+        header: {
+        'Authorization': UserToken,
+        },
+        data: {
+          workers: this.value.map(val => val.url)
+        }
+      }).then(() => {
+        // reload workOrder list
+        this.$parent.$parent.loadWorkOrders();
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+  },
   template: `
   <transition name="modal">
     <div class="modal-mask">
@@ -358,7 +379,7 @@ Vue.component('worker-modal', {
               <button class="btn btn-outline-danger" @click="$emit('close')">
                 Cancel
               </button>
-              <button class="btn btn-danger" v-bind:disabled="submitDisabled" @click="$emit('close')">
+              <button class="btn btn-danger" v-bind:disabled="submitDisabled" @click="saveWorkers(); $emit('close')">
                 Save
               </button>
             </slot>
