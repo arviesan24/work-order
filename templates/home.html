@@ -99,6 +99,7 @@
 <script src="https://unpkg.com/vue-multiselect@2.1.0"></script>
 <script>
 Vue.component('add-workorder-modal', {
+  delimiters: ['[[', ']]'],
   data() {
     return {
       inputTitle: '',
@@ -174,14 +175,17 @@ Vue.component('add-workorder-modal', {
                 <div class="form-group">
                   <label for="inputTitle">Title:</label>
                   <input v-model="inputTitle" v-on:input="inputValidation()" type="text" class="form-control" id="inputTitle" placeholder="Enter Title">
+                  <small class="text-danger">[[titleError]]</small>
                 </div>
                 <div class="form-group">
                   <label for="inputDescription">Description:</label>
                   <textarea v-model="inputDescription" v-on:input="inputValidation()" class="form-control" id="inputDescription" rows="3"></textarea>
+                  <small class="text-danger">[[descriptionError]]</small>
                 </div>
                 <div class="form-group">
                   <label for="inputDeadline">Deadline:</label>
                   <input v-model="inputDeadline" v-on:input="inputValidation()" type="date" class="form-control" id="inputDeadline">
+                  <small class="text-danger">[[deadlineError]]</small>
                 </div>
               </form>
             </slot>
