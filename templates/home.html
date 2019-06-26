@@ -283,6 +283,19 @@ Vue.component('worker-modal', {
   props: {
     selectedWorkOrder: Object,
   },
+  data() {
+    return {
+      value: [],
+      options: [
+        { name: 'Vue.js', language: 'JavaScript' },
+        { name: 'Adonis', language: 'JavaScript' },
+        { name: 'Rails', language: 'Ruby' },
+        { name: 'Sinatra', language: 'Ruby' },
+        { name: 'Laravel', language: 'PHP' },
+        { name: 'Phoenix', language: 'Elixir' }
+      ]
+    }
+  },
   template: `
   <transition name="modal">
     <div class="modal-mask">
@@ -297,6 +310,9 @@ Vue.component('worker-modal', {
 
           <div class="modal-body">
             <slot name="body">
+              <mutiselect-dropdown v-model="value" :options="options" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Pick some" label="name" track-by="name" :preselect-first="true">
+                <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template>
+              </mutiselect-dropdown>
             </slot>
           </div>
 
@@ -314,6 +330,8 @@ Vue.component('worker-modal', {
   </transition>
   `
 })
+
+Vue.component('mutiselect-dropdown', VueMultiselect.Multiselect)
 
 var vm = new Vue({
   el: '#app',
