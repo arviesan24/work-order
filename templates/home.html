@@ -375,18 +375,11 @@ var vm = new Vue({
         return Promise.all([workOrdersPromise, workersPromise])
       })
       .then(([workOrdersPromise, workersPromise]) => {
-        console.log(workOrdersPromise);
-        console.log(workersPromise);
-      });
+        let workOrdersRes = workOrdersPromise.data;
+        let workersRes = workersPromise.data;
 
-      // .then(response => {
-      //   let tempWorkers = [];
-      //   response.data.forEach(workOrder => {
-      //     workOrder.workers.forEach(worker => {
-      //       console.log(worker);
-      //     });
-      //   });
-      // });
+        this.workOrders = this.workOrdersFetchWorkers(workOrdersRes, workersRes);
+      });
     },
   }
 })
