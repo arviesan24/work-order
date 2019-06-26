@@ -290,7 +290,19 @@ Vue.component('worker-modal', {
   data() {
     return {
       value: [],
-      options: []
+      options: [],
+      valueError: '',
+    }
+  },
+  watch: {
+    value() {
+      if (this.value.length > 5) {
+        this.valueError = 'Max of 5 workers are allowed.';
+      } else if (this.value.length == 0) {
+        this.valueError = "Workers can't be zero.";
+      } else {
+        this.valueError = '';
+      }
     }
   },
   mounted() {
@@ -333,6 +345,7 @@ Vue.component('worker-modal', {
                   <span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span>
                 </template>
               </mutiselect-dropdown>
+              <small class="text-danger">[[valueError]]</small>
             </slot>
           </div>
 
