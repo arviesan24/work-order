@@ -325,7 +325,9 @@ Vue.component('worker-modal', {
                 placeholder="Select workers"
                 label="name" track-by="name"
                 :preselect-first="true">
-                <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template>
+                <template slot="selection" slot-scope="{ values, search, isOpen }">
+                  <span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span>
+                </template>
               </mutiselect-dropdown>
             </slot>
           </div>
