@@ -182,6 +182,7 @@ Vue.component('add-workorder-modal', {
                 <div class="form-group">
                   <label for="inputDeadline">Deadline:</label>
                   <input v-model="inputDeadline" v-on:input="inputValidation()" type="date" class="form-control" id="inputDeadline">
+                  <small class="text-danger">[[deadlineError]]</small>
                 </div>
               </form>
             </slot>
