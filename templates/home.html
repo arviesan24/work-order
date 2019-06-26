@@ -358,7 +358,7 @@ var vm = new Vue({
         let newWorkers = [];
         // map changes to each worker of WorkOrder
         if (workOrder.workers.length > 0) {
-          workOrder.workers.map(worker => {
+          workOrder.workers.forEach(worker => {
             // fetch new worker value from all workers
             workersRes.forEach(w => {
               if (worker===w['url']) {
