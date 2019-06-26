@@ -355,18 +355,38 @@ var vm = new Vue({
     },
     loadWorkOrders(searchParam) {
       axios({
-      method: 'get',
-      url: `${apiRootUrl}work-orders/`,
-      params: {
-        workers_name: searchParam
-      },
-      header: {
-        'Authorization': UserToken
+        method: 'get',
+        url: `${apiRootUrl}work-orders/`,
+        params: {
+          workers_name: searchParam
+        },
+        header: {
+          'Authorization': UserToken
         }
       })
-      .then(response => {
-        this.workOrders = response.data;
+      .then(workOrdersPromise => {
+        let workersPromise = axios({
+          method: 'get',
+          url: `${apiRootUrl}workers/`,
+          header: {
+            'Authorization': UserToken
+          }
+        })
+        return Promise.all([workOrdersPromise, workersPromise])
+      })
+      .then(([workOrdersPromise, workersPromise]) => {
+        console.log(workOrdersPromise);
+        console.log(workersPromise);
       });
+
+      // .then(response => {
+      //   let tempWorkers = [];
+      //   response.data.forEach(workOrder => {
+      //     workOrder.workers.forEach(worker => {
+      //       console.log(worker);
+      //     });
+      //   });
+      // });
     },
   }
 })
