@@ -271,7 +271,7 @@ Vue.component('workorder-list', {
         </tr>
       </tbody>
     </table>
-    <worker-modal v-if="showWorkerModal" @close="showWorkerModal=false"></worker-modal>
+    <worker-modal v-if="showWorkerModal" v-bind:selected-work-order="selectedWorkOrder" @close="showWorkerModal=false"></worker-modal>
   </div>
   `
 })
@@ -279,6 +279,7 @@ Vue.component('workorder-list', {
 Vue.component('worker-modal', {
   delimiters: ['[[', ']]'],
   props: {
+    selectedWorkOrder: Object,
   },
   template: `
   <transition name="modal">
@@ -294,7 +295,6 @@ Vue.component('worker-modal', {
 
           <div class="modal-body">
             <slot name="body">
-              
             </slot>
           </div>
 
