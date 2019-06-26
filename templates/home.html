@@ -292,16 +292,20 @@ Vue.component('worker-modal', {
       value: [],
       options: [],
       valueError: '',
+      submitDisabled: false,
     }
   },
   watch: {
     value() {
       if (this.value.length > 5) {
         this.valueError = 'Max of 5 workers are allowed.';
+        this.submitDisabled = true;
       } else if (this.value.length == 0) {
         this.valueError = "Workers can't be zero.";
+        this.submitDisabled = true;
       } else {
         this.valueError = '';
+        this.submitDisabled = false;
       }
     }
   },
@@ -351,9 +355,11 @@ Vue.component('worker-modal', {
 
           <div class="modal-footer">
             <slot name="footer">
-              default footer
-              <button class="modal-default-button" @click="$emit('close')">
-                OK
+              <button class="btn btn-outline-danger" @click="$emit('close')">
+                Cancel
+              </button>
+              <button class="btn btn-danger" v-bind:disabled="submitDisabled" @click="$emit('close')">
+                Save
               </button>
             </slot>
           </div>
