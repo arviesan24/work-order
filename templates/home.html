@@ -127,7 +127,8 @@ Vue.component('add-workorder-modal', {
         data: {
           title: this.inputTitle,
           description: this.inputDescription,
-          deadline: this.inputDeadline
+          deadline: this.inputDeadline,
+          workers: this.value.map(val => val.url)
         }
       }).then(() => {
         // reload workOrder list
