@@ -105,10 +105,13 @@ Vue.component('add-workorder-modal', {
       inputTitle: '',
       inputDescription: '',
       inputDeadline: null,
+      options: [],
+      value: [],
       titleError: '',
       descriptionError: '',
       deadlineError: '',
       submitDisabled: true,
+      valueError: '',
     }
   },
   methods: {
@@ -124,7 +127,8 @@ Vue.component('add-workorder-modal', {
         data: {
           title: this.inputTitle,
           description: this.inputDescription,
-          deadline: this.inputDeadline
+          deadline: this.inputDeadline,
+          workers: this.value.map(val => val.url)
         }
       }).then(() => {
         // reload workOrder list
@@ -138,7 +142,9 @@ Vue.component('add-workorder-modal', {
       if (this.inputTitle==='' || 
           this.inputDescription==='' ||
           !Date.parse(this.inputDeadline) ||
-          Date.parse(this.inputDeadline) < Date.parse(dateToday)) {
+          Date.parse(this.inputDeadline) < Date.parse(dateToday) ||
+          this.value.length > 5 ||
+          this.value.length == 0) {
             this.submitDisabled = true;
       } else {
         this.submitDisabled = false;
@@ -156,6 +162,26 @@ Vue.component('add-workorder-modal', {
       let dateToday = new Date().toLocaleDateString();
       this.deadlineError = (!Date.parse(this.inputDeadline) || Date.parse(this.inputDeadline) < Date.parse(dateToday)) ? "Deadline can't be empty or in the past." : '';
     },
+    value() {
+      if (this.value.length > 5) {
+        this.valueError = 'Max of 5 workers are allowed.';
+      } else if (this.value.length == 0) {
+        this.valueError = "Workers can't be empty.";
+      } else {
+        this.valueError = '';
+      }
+    }
+  },
+  mounted() {
+    axios({
+      method: 'get',
+      url: `${apiRootUrl}workers/`,
+      header: {
+        'Authorization': UserToken
+      }
+    }).then(res => {
+      this.options = res.data;
+    });
   },
   template: `
   <transition name="modal">
@@ -172,21 +198,39 @@ Vue.component('add-workorder-modal', {
           <div class="modal-body">
             <slot name="body">
               <form>
+                <small class="text-danger">Field marked with * is required.</small>
                 <div class="form-group">
-                  <label for="inputTitle">Title:</label>
+                  <span class="text-danger">* </span><label for="inputTitle">Title:</label>
                   <input v-model="inputTitle" v-on:input="inputValidation()" type="text" class="form-control" id="inputTitle" placeholder="Enter Title">
                   <small class="text-danger">[[titleError]]</small>
                 </div>
                 <div class="form-group">
-                  <label for="inputDescription">Description:</label>
+                  <span class="text-danger">* </span><label for="inputDescription">Description:</label>
                   <textarea v-model="inputDescription" v-on:input="inputValidation()" class="form-control" id="inputDescription" rows="3"></textarea>
                   <small class="text-danger">[[descriptionError]]</small>
                 </div>
                 <div class="form-group">
-                  <label for="inputDeadline">Deadline:</label>
+                  <span class="text-danger">* </span><label for="inputDeadline">Deadline:</label>
                   <input v-model="inputDeadline" v-on:input="inputValidation()" type="date" class="form-control" id="inputDeadline">
                   <small class="text-danger">[[deadlineError]]</small>
                 </div>
+                <span class="text-danger">* </span><label>Assign Workers:</label>
+                <mutiselect-dropdown
+                  v-model="value"
+                  @input="inputValidation()"
+                  :options="options"
+                  :multiple="true"
+                  :close-on-select="false"
+                  :clear-on-select="false"
+                  :preserve-search="true"
+                  placeholder="Select workers"
+                  label="name" track-by="name"
+                  :preselect-first="true">
+                  <template slot="selection" slot-scope="{ values, search, isOpen }">
+                    <span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span>
+                  </template>
+                </mutiselect-dropdown>
+                <small class="text-danger">[[valueError]]</small>
               </form>
             </slot>
           </div>
@@ -301,7 +345,7 @@ Vue.component('worker-modal', {
         this.valueError = 'Max of 5 workers are allowed.';
         this.submitDisabled = true;
       } else if (this.value.length == 0) {
-        this.valueError = "Workers can't be zero.";
+        this.valueError = "Workers can't be empty.";
         this.submitDisabled = true;
       } else {
         this.valueError = '';
@@ -311,7 +355,7 @@ Vue.component('worker-modal', {
   },
   mounted() {
     this.value = this.selectedWorkOrder.workers;
-    options = axios({
+    axios({
       method: 'get',
       url: `${apiRootUrl}workers/`,
       header: {
