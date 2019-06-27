@@ -109,6 +109,8 @@ Vue.component('add-workorder-modal', {
       descriptionError: '',
       deadlineError: '',
       submitDisabled: true,
+      value: [],
+      options: [],
     }
   },
   methods: {
@@ -157,6 +159,17 @@ Vue.component('add-workorder-modal', {
       this.deadlineError = (!Date.parse(this.inputDeadline) || Date.parse(this.inputDeadline) < Date.parse(dateToday)) ? "Deadline can't be empty or in the past." : '';
     },
   },
+  mounted() {
+    axios({
+      method: 'get',
+      url: `${apiRootUrl}workers/`,
+      header: {
+        'Authorization': UserToken
+      }
+    }).then(res => {
+      this.options = res.data;
+    });
+  },
   template: `
   <transition name="modal">
     <div class="modal-mask">
@@ -187,6 +200,20 @@ Vue.component('add-workorder-modal', {
                   <input v-model="inputDeadline" v-on:input="inputValidation()" type="date" class="form-control" id="inputDeadline">
                   <small class="text-danger">[[deadlineError]]</small>
                 </div>
+                <mutiselect-dropdown
+                  v-model="value"
+                  :options="options"
+                  :multiple="true"
+                  :close-on-select="false"
+                  :clear-on-select="false"
+                  :preserve-search="true"
+                  placeholder="Select workers"
+                  label="name" track-by="name"
+                  :preselect-first="true">
+                  <template slot="selection" slot-scope="{ values, search, isOpen }">
+                    <span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span>
+                  </template>
+                </mutiselect-dropdown>
               </form>
             </slot>
           </div>
@@ -311,7 +338,7 @@ Vue.component('worker-modal', {
   },
   mounted() {
     this.value = this.selectedWorkOrder.workers;
-    options = axios({
+    axios({
       method: 'get',
       url: `${apiRootUrl}workers/`,
       header: {
