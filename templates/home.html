@@ -87,7 +87,10 @@
         </div>
       </div>
       <div class="col-sm-5 mb-3">
-        <search-bar v-on:emitted-search-text="getSearchText($event)"></search-bar>
+        <search-bar ref="searchTextComponent" v-on:emitted-search-text="getSearchText($event)"></search-bar>
+      </div>
+      <div class="col-sm-2 mb-3">
+        <button class="btn btn-danger" v-on:click="clearSearch">Reset Filter</button>
       </div>
       <div class="col-sm-2 mb-3">
         <button v-on:click="showWorkOrderModal=true" class="btn btn-outline-danger float-right">Add Work Order</button>
@@ -457,6 +460,15 @@ var vm = new Vue({
     getSearchText(searchText) {
       this.searchText = searchText;
       this.loadWorkOrders(this.searchDeadline, this.searchText);
+    },
+    clearSearch() {
+      this.$nextTick(() => {
+        this.searchDeadline = null;
+        this.searchText = '';
+        // clear searchText from search-bar component
+        this.$refs['searchTextComponent'].searchText = '';
+        this.loadWorkOrders();
+      })
     },
     workOrdersFetchWorkers(workOrdersRes, workersRes) {
       workOrdersRes.forEach(workOrder => {
