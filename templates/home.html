@@ -101,7 +101,7 @@
         <add-workorder-modal v-if="showWorkOrderModal" v-on:close="showWorkOrderModal=false"></add-workorder-modal>
       </div>
     </div>
-    <workorder-list v-bind:work-orders="workOrders"></workorder-list>
+    <workorder-list v-on:worker-to-delete="removeWorkOrderWorker($event)" v-bind:work-orders="workOrders"></workorder-list>
   </div>
 </div>
 {% endblock content %}
@@ -303,6 +303,9 @@ Vue.component('workorder-list', {
     }
   },
   methods: {
+    emitWorker(workOrder, worker) {
+      this.$emit('worker-to-delete', {'work-order': workOrder, 'worker': worker});
+    }
   },
   template: `
   <div class="table-responsive">
@@ -322,7 +325,7 @@ Vue.component('workorder-list', {
           <td>[[ workOrder.deadline ]]</td>
           <td>
             <span v-for="worker in workOrder.workers">
-              <button tooltip.hover title="Double-click to remove" class="btn btn-outline-primary workeritem btn-sm mx-1 my-1">
+              <button v-on:dblclick="emitWorker(workOrder, worker)" v-bind:disabled="workOrder.workers.length==1" tooltip.hover title="Double-click to remove" class="btn btn-outline-primary workeritem btn-sm mx-1 my-1">
                 [[ worker.name ]]
               </button>
             </span>
@@ -519,6 +522,31 @@ var vm = new Vue({
         this.workOrders = this.workOrdersFetchWorkers(workOrdersRes, workersRes);
       });
     },
+    removeWorkOrderWorker(obj) {
+      axios.defaults.xsrfCookieName = 'csrftoken';
+      axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+      let workOrderWorkers = obj['work-order'].workers;
+      let workersSplicer = null;
+      // Get the index of the worker to be removed.
+      workOrderWorkers.forEach((worker, index) => {
+        if (worker.url===obj.worker.url) {
+          workersSplicer = index;
+        }
+      });
+      // Remove the selected worker from workOrder's workers.
+      workOrderWorkers.splice(workersSplicer, 1);
+
+      axios({
+        method: 'patch',
+        url: obj['work-order'].url,
+        header: {
+        'Authorization': UserToken,
+        },
+        data: {
+          workers: workOrderWorkers.map(worker => worker.url)
+        }
+      })
+    }
   }
 })
 </script>
