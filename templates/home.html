@@ -462,13 +462,11 @@ var vm = new Vue({
       this.loadWorkOrders(this.searchDeadline, this.searchText);
     },
     clearSearch() {
-      this.$nextTick(() => {
-        this.searchDeadline = null;
-        this.searchText = '';
-        // clear searchText from search-bar component
-        this.$refs['searchTextComponent'].searchText = '';
-        this.loadWorkOrders();
-      })
+      this.searchDeadline = null;
+      this.searchText = '';
+      // clear searchText from search-bar component
+      this.$refs['searchTextComponent'].searchText = '';
+      this.loadWorkOrders();
     },
     workOrdersFetchWorkers(workOrdersRes, workersRes) {
       workOrdersRes.forEach(workOrder => {
