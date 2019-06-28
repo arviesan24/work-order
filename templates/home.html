@@ -81,10 +81,18 @@
   <div class="card-header text-center"><h1>Work Orders</h1></div>
   <div class="card-body">
     <div class="row">
-      <div class="col-sm-6 mb-3">
-        <search-bar v-on:emitted-search-text="getSearchText($event)"></search-bar>
+      <div class="col-sm-3 mb-3">
+        <div class="form-group">
+          <input type="date" v-model="searchDeadline" class="form-control" id="searchDeadline">
+        </div>
       </div>
-      <div class="col-sm-6 mb-3">
+      <div class="col-sm-5 mb-3">
+        <search-bar ref="searchTextComponent" v-on:emitted-search-text="getSearchText($event)"></search-bar>
+      </div>
+      <div class="col-sm-2 mb-3">
+        <button class="btn btn-danger" v-on:click="clearSearch">Reset Filter</button>
+      </div>
+      <div class="col-sm-2 mb-3">
         <button v-on:click="showWorkOrderModal=true" class="btn btn-outline-danger float-right">Add Work Order</button>
         <add-workorder-modal v-if="showWorkOrderModal" v-on:close="showWorkOrderModal=false"></add-workorder-modal>
       </div>
@@ -310,7 +318,7 @@ Vue.component('workorder-list', {
           <td>[[ workOrder.deadline ]]</td>
           <td>
             <span v-for="worker in workOrder.workers">
-              <button tooltip.hover title="Double-click to remove" class="btn btn-outline-primary btn-sm mx-1">
+              <button tooltip.hover title="Double-click to remove" class="btn btn-outline-primary btn-sm mx-1 my-1">
                 [[ worker.name ]]
               </button>
             </span>
@@ -442,6 +450,7 @@ var vm = new Vue({
   data:{
     workOrders: [],
     searchText: '',
+    searchDeadline: null,
     showWorkOrderModal: false,
   },
   mounted() {
@@ -450,7 +459,14 @@ var vm = new Vue({
   methods: {
     getSearchText(searchText) {
       this.searchText = searchText;
-      this.loadWorkOrders(this.searchText);
+      this.loadWorkOrders(this.searchDeadline, this.searchText);
+    },
+    clearSearch() {
+      this.searchDeadline = null;
+      this.searchText = '';
+      // clear searchText from search-bar component
+      this.$refs['searchTextComponent'].searchText = '';
+      this.loadWorkOrders();
     },
     workOrdersFetchWorkers(workOrdersRes, workersRes) {
       workOrdersRes.forEach(workOrder => {
@@ -470,12 +486,13 @@ var vm = new Vue({
       });
       return workOrdersRes;
     },
-    loadWorkOrders(searchParam) {
+    loadWorkOrders(deadlineParam, searchParam) {
       axios({
         method: 'get',
         url: `${apiRootUrl}work-orders/`,
         params: {
-          workers_name: searchParam
+          workers_name: searchParam,
+          deadline: deadlineParam
         },
         header: {
           'Authorization': UserToken
