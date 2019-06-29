@@ -1,0 +1,69 @@
+{% extends 'vue_base.html' %}
+
+{% block title %}Workers{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+<div id="app" class="card col-md-8 offset-md-2 mt-4 px-0">
+  <div class="card-header text-center"><h1>Workers</h1></div>
+  <div class="card-body">
+    <workers-list v-bind:workers="workers"></workers-list>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+{{ block.super }}
+<script>
+Vue.component('workers-list', {
+  delimiters: ['[[', ']]'],
+  props: {
+    workers: Array,
+  },
+  template: `
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Company</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="worker in workers">
+        <th scope="row">[[ worker.name ]]</th>
+        <td>[[ worker.company ]]</td>
+        <td>[[ worker.email ]]</td>
+      </tr>
+    </tbody>
+  </table>
+  `
+})
+
+var vm = new Vue({
+  el: '#app',
+  data: {
+    workers: [],
+  },
+  mounted() {
+    this.loadWorkers();
+  },
+  methods: {
+    loadWorkers() {
+      axios({
+        method: 'get',
+        url: `${apiRootUrl}workers/`,
+        header: {
+          'Authorization': UserToken
+        }
+      })
+      .then(response => {
+        this.workers = response.data;
+      });
+    }
+  }
+})
+</script>
+{% endblock js %}
