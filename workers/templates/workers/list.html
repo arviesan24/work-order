@@ -89,7 +89,8 @@
     </div>
   </div>
   <div class="card-body">
-    <workers-list v-bind:workers="workers"></workers-list>
+    <workers-list v-bind:workers="workers" v-on:delete-worker="deleteWorker($event)"></workers-list>
+    <delete-worker-modal v-bind:worker="workerToDelete" v-if="deleteWorkerConfirmModal" @close="deleteWorkerConfirmModal=false"></delete-worker-modal>
   </div>
 </div>
 {% endblock content %}
@@ -97,6 +98,46 @@
 {% block js %}
 {{ block.super }}
 <script>
+Vue.component('delete-worker-modal', {
+  delimiters: ['[[', ']]'],
+  props: {
+    worker: Object,
+  },
+  template: `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              <h3>Delete Confirmation</h3>
+            </slot>
+          </div>
+
+          <div class="modal-body">
+            <slot name="body">
+              Do you really want to delete worker <strong>[[ worker.name ]]</strong>?
+            </slot>
+          </div>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              <button class="btn btn-outline-danger mx-2" @click="$emit('close')">
+                Cancel
+              </button>
+              <button class="btn btn-danger ml-2" @click="$emit('close')">
+                Delete
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+})
+
 Vue.component('add-worker-modal', {
   delimiters: ['[[', ']]'],
   data() {
@@ -223,6 +264,11 @@ Vue.component('workers-list', {
   props: {
     workers: Array,
   },
+  methods: {
+    emitDeleteWorker(worker) {
+      this.$emit('delete-worker', worker);
+    }
+  },
   template: `
   <table class="table table-hover">
     <thead>
@@ -236,7 +282,7 @@ Vue.component('workers-list', {
     <tbody>
       <tr v-for="worker in workers">
         <th scope="row">
-          <button class="btn btn-danger btn-sm mr-2">x</button>
+          <button v-on:click="emitDeleteWorker(worker)" class="btn btn-danger btn-sm mr-2">x</button>
         </th>
         <td>[[ worker.name ]]</td>
         <td>[[ worker.company ]]</td>
@@ -252,6 +298,8 @@ var vm = new Vue({
   data: {
     workers: [],
     showAddWorkerModal: false,
+    deleteWorkerConfirmModal: false,
+    workerToDelete: {},
   },
   mounted() {
     this.loadWorkers();
@@ -268,6 +316,10 @@ var vm = new Vue({
       .then(response => {
         this.workers = response.data;
       });
+    },
+    deleteWorker(worker) {
+      this.deleteWorkerConfirmModal = true;
+      this.workerToDelete = worker;
     }
   }
 })
