@@ -103,6 +103,22 @@ Vue.component('delete-worker-modal', {
   props: {
     worker: Object,
   },
+  methods: {
+    deleteWorkerRecords() {
+      axios.defaults.xsrfCookieName = 'csrftoken';
+      axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+      axios({
+        method: "delete",
+        url: this.worker.url,
+        header: {
+          'Authorization': UserToken
+        }
+      })
+      .then(() => {
+        this.$parent.loadWorkers();
+      })
+    }
+  },
   template: `
   <transition name="modal">
     <div class="modal-mask">
@@ -117,7 +133,7 @@ Vue.component('delete-worker-modal', {
 
           <div class="modal-body">
             <slot name="body">
-              Do you really want to delete worker <strong>[[ worker.name ]]</strong>?
+              <p>Do you really want to delete worker <strong>[[ worker.name ]]</strong>?</p>
             </slot>
           </div>
 
@@ -126,7 +142,7 @@ Vue.component('delete-worker-modal', {
               <button class="btn btn-outline-danger mx-2" @click="$emit('close')">
                 Cancel
               </button>
-              <button class="btn btn-danger ml-2" @click="$emit('close')">
+              <button class="btn btn-danger ml-2" @click="deleteWorkerRecords(); $emit('close')">
                 Delete
               </button>
             </slot>
