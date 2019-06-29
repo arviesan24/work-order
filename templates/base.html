@@ -21,6 +21,10 @@
         <li class="nav-item{% if request.path == home %} active{% endif %}">
           <a class="nav-link" href="{{ home }}">Home {% if request.path == home %}<span class="sr-only">(current)</span>{% endif %}</a>
         </li>
+        {% url 'workers:list' as worker_list %}
+        <li class="nav-item{% if request.path == worker_list %} active{% endif %}">
+          <a class="nav-link" href="{{ worker_list }}">Workers {% if request.path == worker_list %}<span class="sr-only">(current)</span>{% endif %}</a>
+        </li>
         {% url 'accounts:user-logout' as account_logout %}
         <li class="nav-item{% if request.path == account_logout %} active{% endif %}">
           <a class="nav-link" href="{{ account_logout }}">Sign-out {% if request.path == account_logout %}<span class="sr-only">(current)</span>{% endif %}</a>
