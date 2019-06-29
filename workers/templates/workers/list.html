@@ -7,7 +7,16 @@
 
 {% block content %}
 <div id="app" class="card col-md-8 offset-md-2 mt-4 px-0">
-  <div class="card-header text-center"><h1>Workers</h1></div>
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-10 text-center">
+        <h1 class="d-inline">Workers</h1>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-outline-danger btn-lg btn-block float-right">Add Worker</button>
+      </div>    
+    </div>
+  </div>
   <div class="card-body">
     <workers-list v-bind:workers="workers"></workers-list>
   </div>
