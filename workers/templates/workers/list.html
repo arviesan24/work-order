@@ -120,6 +120,25 @@ Vue.component('add-worker-modal', {
       } else {
         this.submitDisabled = false;
       }
+    },
+    saveWorker() {
+      axios.defaults.xsrfCookieName = 'csrftoken';
+      axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+      axios({
+        method: "post",
+        url: `${apiRootUrl}workers/`,
+        header: {
+          'Authorization': UserToken
+        },
+        data: {
+          name: this.inputName,
+          company: this.inputCompany,
+          email: this.inputEmail
+        }
+      })
+      .then(()=> {
+        this.$parent.loadWorkers();
+      });
     }
   },
   watch: {
@@ -187,7 +206,7 @@ Vue.component('add-worker-modal', {
               <button class="btn btn-outline-danger mx-2" @click="$emit('close')">
                 Cancel
               </button>
-              <button class="btn btn-danger ml-2" v-bind:disabled="submitDisabled" @click="$emit('close')">
+              <button class="btn btn-danger ml-2" v-bind:disabled="submitDisabled" @click="saveWorker(); $emit('close')">
                 Save
               </button>
             </slot>
