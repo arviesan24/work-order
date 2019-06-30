@@ -1,6 +1,19 @@
-=================
+===================
+Project Description
+===================
+
+- Site location: `<https://romelsantoral.pythonanywhere.com/>`_
+
+**WorkOrder** is a site that gives an authenticated user the ability
+to create work orders and assign a maximum of 5 workers on each it.
+It also allows the user to filter it based on the assigned worker or
+its deadline and manage the list of assigned workers. Finally,
+by navigating the workers list page, the user will be able to
+add or remove a worker.
+
+==============
 Project Setup
-=================
+==============
 - Create a virtual environment.
     ::
 
