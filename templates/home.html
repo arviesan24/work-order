@@ -111,38 +111,11 @@
 {{ block.super }}
 <script src="https://unpkg.com/vue-multiselect@2.1.0"></script>
 <script>
-Vue.component('search-bar', {
-  props: {
-
-  },
-  data() {
-    return {
-      searchText: ''
-    }
-  },
-  mounted() {
-    this.search = this.searchText;
-  },
-  methods: {
-    emitSearchValue(searchText) {
-      this.$emit('emitted-search-text',  searchText);
-    }
-  },
-  template: `
-    <div class="input-group">
-      <input type="text" v-model:value="searchText" class="form-control" placeholder="Search Worker" aria-label="Search Worker">
-      <div class="input-group-append">
-        <button class="btn btn-outline-danger" v-on:click="emitSearchValue(searchText)">Search</button>
-      </div>
-    </div>
-  `
-})
-
 Vue.component('mutiselect-dropdown', VueMultiselect.Multiselect)
-
 </script>
 <script src="{% static 'scripts/vue/views/home.js' %}"></script>
 <script src="{% static 'scripts/vue/components/add-workorder-modal.js' %}"></script>
+<script src="{% static 'scripts/vue/components/search-bar.js' %}"></script>
 <script src="{% static 'scripts/vue/components/worker-modal.js' %}"></script>
 <script src="{% static 'scripts/vue/components/workorder-list.js' %}"></script>
 {% endblock js %}
