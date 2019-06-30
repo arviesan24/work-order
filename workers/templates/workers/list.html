@@ -1,4 +1,5 @@
 {% extends 'vue_base.html' %}
+{% load static %}
 
 {% block title %}Workers{% endblock title %}
 
@@ -308,36 +309,6 @@ Vue.component('workers-list', {
   </table>
   `
 })
-
-var vm = new Vue({
-  el: '#app',
-  data: {
-    workers: [],
-    showAddWorkerModal: false,
-    deleteWorkerConfirmModal: false,
-    workerToDelete: {},
-  },
-  mounted() {
-    this.loadWorkers();
-  },
-  methods: {
-    loadWorkers() {
-      axios({
-        method: 'get',
-        url: `${apiRootUrl}workers/`,
-        header: {
-          'Authorization': UserToken
-        }
-      })
-      .then(response => {
-        this.workers = response.data;
-      });
-    },
-    deleteWorker(worker) {
-      this.deleteWorkerConfirmModal = true;
-      this.workerToDelete = worker;
-    }
-  }
-})
 </script>
+<script src="{% static 'workers/scripts/vue/views/list.js' %}"></script>
 {% endblock js %}
