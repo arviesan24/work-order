@@ -48,6 +48,11 @@ Project Setup
         > DEBUG="true"
         > EOF
 
+- Run the local server.
+    ::
+
+        $ python manage.py runserver
+
 - Access the admin site using a browser `<http://127.0.0.1:8000/admin/sites/site/>`_ and login using the superuser account created earlier.
 - Select the ``example.com`` record and replace its domain and display name with ``127.0.0.1:8000``.
 - Go to `<http://127.0.0.1:8000/>`_ and test the site.
