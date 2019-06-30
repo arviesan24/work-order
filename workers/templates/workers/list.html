@@ -1,0 +1,343 @@
+{% extends 'vue_base.html' %}
+
+{% block title %}Workers{% endblock title %}
+
+{% block css %}
+<style>
+/* modal CSS */
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  max-width: 500px;
+  margin: 0px auto;
+  padding: 0px 0px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header {
+  background-color: #DC3545;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #fff;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+</style>
+{% endblock css %}
+
+{% block content %}
+<div id="app" class="card col-md-8 offset-md-2 mt-4 px-0">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-10 text-center">
+        <h1 class="d-inline">Workers</h1>
+      </div>
+      <div class="col-md-2">
+        <button @click="showAddWorkerModal=true" class="btn btn-outline-danger btn-lg btn-block float-right">Add Worker</button>
+      </div>
+      <add-worker-modal v-if="showAddWorkerModal" @close="showAddWorkerModal=false"></add-worker-modal>   
+    </div>
+  </div>
+  <div class="card-body">
+    <workers-list v-bind:workers="workers" v-on:delete-worker="deleteWorker($event)"></workers-list>
+    <delete-worker-modal v-bind:worker="workerToDelete" v-if="deleteWorkerConfirmModal" @close="deleteWorkerConfirmModal=false"></delete-worker-modal>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+{{ block.super }}
+<script>
+Vue.component('delete-worker-modal', {
+  delimiters: ['[[', ']]'],
+  props: {
+    worker: Object,
+  },
+  methods: {
+    deleteWorkerRecords() {
+      axios.defaults.xsrfCookieName = 'csrftoken';
+      axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+      axios({
+        method: "delete",
+        url: this.worker.url,
+        header: {
+          'Authorization': UserToken
+        }
+      })
+      .then(() => {
+        this.$parent.loadWorkers();
+      })
+    }
+  },
+  template: `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              <h3>Delete Confirmation</h3>
+            </slot>
+          </div>
+
+          <div class="modal-body">
+            <slot name="body">
+              <p>Do you really want to delete worker <strong>[[ worker.name ]]</strong>?</p>
+            </slot>
+          </div>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              <button class="btn btn-outline-danger mx-2" @click="$emit('close')">
+                Cancel
+              </button>
+              <button class="btn btn-danger ml-2" @click="deleteWorkerRecords(); $emit('close')">
+                Delete
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+})
+
+Vue.component('add-worker-modal', {
+  delimiters: ['[[', ']]'],
+  data() {
+    return {
+      inputName: null,
+      inputCompany: null,
+      inputEmail: null,
+      errors: {},
+      submitDisabled: true,
+    }
+  },
+  methods: {
+    validEmail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
+    disableSubmit() {
+      if (!this.inputName || !this.inputCompany || !this.inputEmail ||
+          !this.validEmail(this.inputEmail)) {
+        this.submitDisabled = true;
+      } else {
+        this.submitDisabled = false;
+      }
+    },
+    saveWorker() {
+      axios.defaults.xsrfCookieName = 'csrftoken';
+      axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+      axios({
+        method: "post",
+        url: `${apiRootUrl}workers/`,
+        header: {
+          'Authorization': UserToken
+        },
+        data: {
+          name: this.inputName,
+          company: this.inputCompany,
+          email: this.inputEmail
+        }
+      })
+      .then(()=> {
+        this.$parent.loadWorkers();
+      });
+    }
+  },
+  watch: {
+    inputName() {
+      if (!this.inputName) {
+        this.errors['inputName'] = "Name is required.";
+      } else {
+        this.errors['inputName'] = "";
+      }
+    },
+    inputCompany() {
+      if (!this.inputCompany) {
+        this.errors['inputCompany'] = "Company is required.";
+      } else {
+        this.errors['inputCompany'] = "";
+      }
+    },
+    inputEmail() {
+      if (!this.inputEmail) {
+        this.errors['inputEmail'] = "Email is required.";
+      } else if (!this.validEmail(this.inputEmail)) {
+        this.errors['inputEmail'] = ('Valid email is required.');
+      } else {
+        this.errors['inputEmail'] = "";
+      }
+    }
+  },
+  template: `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              <h3>New Worker</h3>
+            </slot>
+          </div>
+
+          <div class="modal-body">
+            <slot name="body">
+              <form>
+                <small class="text-danger">Please note that all fields marked with an asterisk (*) are required.</small>
+                <div class="form-group">
+                  <span class="text-danger">* </span><label for="inputName">Name:</label>
+                  <input type="text" v-model="inputName" v-on:input="disableSubmit" class="form-control" id="inputName" placeholder="Worker's name">
+                  <small class="text-danger">[[errors.inputName]]</small>
+                </div>
+                <div class="form-group">
+                  <span class="text-danger">* </span><label for="inputCompany">Company:</label>
+                  <input type="text" v-model="inputCompany" v-on:input="disableSubmit" class="form-control" id="inputCompany" placeholder="Worker's company">
+                  <small class="text-danger">[[errors.inputCompany]]</small>
+                </div>
+                <div class="form-group">
+                  <span class="text-danger">* </span><label for="inputEmail">Email:</label>
+                  <input type="email"  v-model="inputEmail" v-on:input="disableSubmit" class="form-control" id="inputEmail" placeholder="Worker's e-mail">
+                  <small class="text-danger">[[errors.inputEmail]]</small>
+                </div>
+              </form>
+            </slot>
+          </div>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              <button class="btn btn-outline-danger mx-2" @click="$emit('close')">
+                Cancel
+              </button>
+              <button class="btn btn-danger ml-2" v-bind:disabled="submitDisabled" @click="saveWorker(); $emit('close')">
+                Save
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+})
+
+Vue.component('workers-list', {
+  delimiters: ['[[', ']]'],
+  props: {
+    workers: Array,
+  },
+  methods: {
+    emitDeleteWorker(worker) {
+      this.$emit('delete-worker', worker);
+    }
+  },
+  template: `
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Delete</th>
+        <th scope="col">Name</th>
+        <th scope="col">Company</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="worker in workers">
+        <th scope="row">
+          <button v-on:click="emitDeleteWorker(worker)" class="btn btn-danger btn-sm mr-2">x</button>
+        </th>
+        <td>[[ worker.name ]]</td>
+        <td>[[ worker.company ]]</td>
+        <td>[[ worker.email ]]</td>
+      </tr>
+    </tbody>
+  </table>
+  `
+})
+
+var vm = new Vue({
+  el: '#app',
+  data: {
+    workers: [],
+    showAddWorkerModal: false,
+    deleteWorkerConfirmModal: false,
+    workerToDelete: {},
+  },
+  mounted() {
+    this.loadWorkers();
+  },
+  methods: {
+    loadWorkers() {
+      axios({
+        method: 'get',
+        url: `${apiRootUrl}workers/`,
+        header: {
+          'Authorization': UserToken
+        }
+      })
+      .then(response => {
+        this.workers = response.data;
+      });
+    },
+    deleteWorker(worker) {
+      this.deleteWorkerConfirmModal = true;
+      this.workerToDelete = worker;
+    }
+  }
+})
+</script>
+{% endblock js %}

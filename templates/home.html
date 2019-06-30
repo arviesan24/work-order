@@ -210,7 +210,7 @@ Vue.component('add-workorder-modal', {
           <div class="modal-body">
             <slot name="body">
               <form>
-                <small class="text-danger">Field marked with * is required.</small>
+                <small class="text-danger">Please note that all fields marked with an asterisk (*) are required.</small>
                 <div class="form-group">
                   <span class="text-danger">* </span><label for="inputTitle">Title:</label>
                   <input v-model="inputTitle" v-on:input="inputValidation()" type="text" class="form-control" id="inputTitle" placeholder="Enter Title">
