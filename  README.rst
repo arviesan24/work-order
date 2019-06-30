@@ -23,7 +23,7 @@ Project Setup
 - Activate the virtual environment after creating it.
     ::
 
-        $ source 3.7@workorder/bin/Activate
+        $ source 3.7@workorder/bin/activate
 
 - Move inside the project's directory then install django and other required packages.
     ::
