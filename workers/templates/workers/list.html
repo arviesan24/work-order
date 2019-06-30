@@ -80,11 +80,11 @@
 <div id="app" class="card col-md-8 offset-md-2 mt-4 px-0">
   <div class="card-header">
     <div class="row">
-      <div class="col-md-10 text-center">
+      <div class="col-md-10 text-center px-1">
         <h1 class="d-inline">Workers</h1>
       </div>
-      <div class="col-md-2">
-        <button @click="showAddWorkerModal=true" class="btn btn-outline-danger btn-lg btn-block float-right">Add Worker</button>
+      <div class="col-md-2 px-1">
+        <button style="white-space: normal;" @click="showAddWorkerModal=true" class="btn btn-outline-danger btn-lg btn-block float-right">Add Worker</button>
       </div>
       <add-worker-modal v-if="showAddWorkerModal" @close="showAddWorkerModal=false"></add-worker-modal>   
     </div>

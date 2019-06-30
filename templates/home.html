@@ -86,19 +86,19 @@
   <div class="card-header text-center"><h1>Work Orders</h1></div>
   <div class="card-body">
     <div class="row">
-      <div class="col-lg-3 mb-3">
+      <div class="col-lg-3 mb-3 px-1">
         <div class="form-group">
           <input type="date" v-model="searchDeadline" class="form-control" id="searchDeadline">
         </div>
       </div>
-      <div class="col-lg-5 mb-3">
+      <div class="col-lg-5 mb-3 px-1">
         <search-bar ref="searchTextComponent" v-on:emitted-search-text="getSearchText($event)"></search-bar>
       </div>
-      <div class="col-lg-2 mb-3">
+      <div class="col-lg-2 mb-3 px-1">
         <button class="btn btn-danger btn-block" v-on:click="clearSearch">Reset Filter</button>
       </div>
-      <div class="col-lg-2 mb-3">
-        <button v-on:click="showWorkOrderModal=true" class="btn btn-outline-danger btn-block">Add Work Order</button>
+      <div class="col-lg-2 mb-3 px-1">
+        <button v-on:click="showWorkOrderModal=true" class="btn btn-outline-danger btn-block px-0" style="white-space: normal;">Add Work Order</button>
         <add-workorder-modal v-if="showWorkOrderModal" v-on:close="showWorkOrderModal=false"></add-workorder-modal>
       </div>
     </div>
