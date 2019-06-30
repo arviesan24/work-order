@@ -26,12 +26,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'srjca60d(6&4whglh+gd7yke8f^_n5y5bz(d1cz3^_7r)%ta5o'
+SECRET_KEY = os.getenv(
+    'SECRET_KEY', 'srjca60d(6&4whglh+gd7yke8f^_n5y5bz(d1cz3^_7r)%ta5o')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = json.loads(os.getenv('DEBUG', 'false'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = json.loads(os.getenv('ALLOWED_HOSTS', '["127.0.0.1:8000"]'))
 
 
 # Application definition
@@ -71,7 +72,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-SITE_ID = 1
+SITE_ID = os.getenv('SITE_ID', 1)
 
 
 #
@@ -89,6 +90,19 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+
+# Allow HTTPS on the server
+if not DEBUG:
+    CORS_REPLACE_HTTPS_REFERER      = True
+    HOST_SCHEME                     = "https://"
+    SECURE_PROXY_SSL_HEADER         = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT             = True
+    SESSION_COOKIE_SECURE           = True
+    CSRF_COOKIE_SECURE              = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS  = True
+    SECURE_HSTS_SECONDS             = 1000000
+    SECURE_FRAME_DENY               = True
 
 
 MIDDLEWARE = [
@@ -172,4 +186,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = os.getenv('STATIC_URL', '/static/')
+
+MEDIA_URL = os.getenv('MEDIA_URL', '/media/')
+
+STATIC_ROOT = os.getenv(
+    'STATIC_ROOT',
+    os.path.join(os.path.dirname(BASE_DIR), 'public', 'static'))
+
+MEDIA_ROOT = os.getenv(
+    'MEDIA_ROOT',
+    os.path.join(os.path.dirname(BASE_DIR), 'public', 'media'))
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'statics'),
+]
