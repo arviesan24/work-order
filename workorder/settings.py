@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'srjca60d(6&4whglh+gd7yke8f^_n5y5bz(d1cz3^_7r)%ta5o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = json.loads(os.getenv('DEBUG', 'false'))
 
 ALLOWED_HOSTS = json.loads(os.getenv('ALLOWED_HOSTS', '["127.0.0.1:8000"]'))
 
