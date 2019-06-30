@@ -84,7 +84,7 @@
         <h1 class="d-inline">Workers</h1>
       </div>
       <div class="col-md-2 px-1">
-        <button @click="showAddWorkerModal=true" class="btn btn-outline-danger btn-lg btn-block float-right">Add Worker</button>
+        <button style="white-space: normal;" @click="showAddWorkerModal=true" class="btn btn-outline-danger btn-lg btn-block float-right">Add Worker</button>
       </div>
       <add-worker-modal v-if="showAddWorkerModal" @close="showAddWorkerModal=false"></add-worker-modal>   
     </div>

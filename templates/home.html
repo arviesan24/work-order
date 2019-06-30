@@ -98,7 +98,7 @@
         <button class="btn btn-danger btn-block" v-on:click="clearSearch">Reset Filter</button>
       </div>
       <div class="col-lg-2 mb-3 px-1">
-        <button v-on:click="showWorkOrderModal=true" class="btn btn-outline-danger btn-block">Add Work Order</button>
+        <button v-on:click="showWorkOrderModal=true" class="btn btn-outline-danger btn-block px-0" style="white-space: normal;">Add Work Order</button>
         <add-workorder-modal v-if="showWorkOrderModal" v-on:close="showWorkOrderModal=false"></add-workorder-modal>
       </div>
     </div>
