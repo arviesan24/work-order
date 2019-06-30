@@ -11,6 +11,7 @@ its deadline and manage the list of assigned workers. Finally,
 by navigating the workers list page, the user will be able to
 add or remove a worker.
 
+
 ==============
 Project Setup
 ==============
